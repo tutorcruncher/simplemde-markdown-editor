@@ -1,7 +1,7 @@
 (function(f){if(typeof exports==="object"&&typeof module!=="undefined"){module.exports=f()}else if(typeof define==="function"&&define.amd){define([],f)}else{var g;if(typeof window!=="undefined"){g=window}else if(typeof global!=="undefined"){g=global}else if(typeof self!=="undefined"){g=self}else{g=this}g.SimpleMDE = f()}})(function(){var define,module,exports;return (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 (function (global){
 
-; Typo = global.Typo = require("/Users/wescossick/Documents/Websites/simplemde-markdown-editor/node_modules/codemirror-spell-checker/src/js/typo.js");
+; Typo = global.Typo = require("/home/samuel/code/simplemde-markdown-editor/node_modules/codemirror-spell-checker/src/js/typo.js");
 CodeMirror = global.CodeMirror = require("codemirror");
 ; var __browserify_shim_require__=require;(function browserifyShim(module, define, require) {
 // Initialize data globally to reduce memory consumption
@@ -99,7 +99,7 @@ if(!String.prototype.includes) {
 }).call(global, module, undefined, undefined);
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"/Users/wescossick/Documents/Websites/simplemde-markdown-editor/node_modules/codemirror-spell-checker/src/js/typo.js":2,"codemirror":6}],2:[function(require,module,exports){
+},{"/home/samuel/code/simplemde-markdown-editor/node_modules/codemirror-spell-checker/src/js/typo.js":2,"codemirror":6}],2:[function(require,module,exports){
 (function (global){
 ; var __browserify_shim_require__=require;(function browserifyShim(module, exports, require, define, browserify_shim__define__module__export__) {
 'use strict';
@@ -12727,6 +12727,35 @@ if (typeof module !== 'undefined' && typeof exports === 'object') {
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 },{}],12:[function(require,module,exports){
+var CodeMirror = require("codemirror");
+
+CodeMirror.defineMode("mustache_vars", function(config, parserConfig) {
+	var ctx_vars = parserConfig.context_variables;
+	var mustacheOverlay = {
+		token: function(stream) {
+			var ch;
+			if (stream.match("{{")) {
+				while ((ch = stream.next()) != null)
+					if (ch === "}" && stream.next() === "}") {
+						stream.eat("}");
+						var mustache_variable = stream.current().replace(/[{}/# ^]/g, "");
+						if (typeof(ctx_vars) !== "undefined" && ctx_vars.indexOf(mustache_variable) === -1){
+							return "mustache-error";
+						} else {
+							return "mustache";
+						}
+					}
+			}
+			while (stream.next() != null && !stream.match("{{", false)) {
+				continue;
+			}
+			return null;
+		}
+	};
+	return CodeMirror.overlayMode(CodeMirror.getMode(config, parserConfig.backdrop || "gfm"), mustacheOverlay);
+});
+
+},{"codemirror":6}],13:[function(require,module,exports){
 // CodeMirror, copyright (c) by Marijn Haverbeke and others
 // Distributed under an MIT license: http://codemirror.net/LICENSE
 
@@ -12772,7 +12801,7 @@ CodeMirror.commands.shiftTabAndUnindentMarkdownList = function (cm) {
 	}
 };
 
-},{"codemirror":6}],13:[function(require,module,exports){
+},{"codemirror":6}],14:[function(require,module,exports){
 /*global require,module*/
 "use strict";
 var CodeMirror = require("codemirror");
@@ -12783,6 +12812,7 @@ require("codemirror/mode/markdown/markdown.js");
 require("codemirror/addon/mode/overlay.js");
 require("codemirror/mode/gfm/gfm.js");
 require("codemirror/mode/xml/xml.js");
+require("./codemirror/mustache_vars");
 require("spell-checker");
 var marked = require("marked");
 
@@ -13687,12 +13717,13 @@ SimpleMDE.prototype.render = function(el) {
 	if(options.spellChecker !== false) {
 		mode = "spell-checker";
 		backdrop = options.parsingConfig;
-		backdrop.name = "gfm";
+		backdrop.name = "mustache_vars";
 		backdrop.gitHubSpice = false;
 	} else {
 		mode = options.parsingConfig;
-		mode.name = "gfm";
+		mode.name = "mustache_vars";
 		mode.gitHubSpice = false;
+		mode.context_variables = options.context_variables;
 	}
 
 	this.codemirror = CodeMirror.fromTextArea(el, {
@@ -13740,7 +13771,7 @@ SimpleMDE.prototype.autosave = function() {
 	}
 
 	if(this.options.autosave.loaded !== true) {
-		if(localStorage.getItem(this.options.autosave.unique_id) != null)
+		if(typeof localStorage.getItem(this.options.autosave.unique_id) == "string" && localStorage.getItem(this.options.autosave.unique_id) != "")
 			this.codemirror.setValue(localStorage.getItem(this.options.autosave.unique_id));
 
 		this.options.autosave.loaded = true;
@@ -14064,5 +14095,5 @@ SimpleMDE.prototype.isFullscreenActive = function() {
 
 module.exports = SimpleMDE;
 
-},{"./codemirror/tablist":12,"codemirror":6,"codemirror/addon/display/fullscreen.js":3,"codemirror/addon/edit/continuelist.js":4,"codemirror/addon/mode/overlay.js":5,"codemirror/mode/gfm/gfm.js":7,"codemirror/mode/markdown/markdown.js":8,"codemirror/mode/xml/xml.js":10,"marked":11,"spell-checker":1}]},{},[13])(13)
+},{"./codemirror/mustache_vars":12,"./codemirror/tablist":13,"codemirror":6,"codemirror/addon/display/fullscreen.js":3,"codemirror/addon/edit/continuelist.js":4,"codemirror/addon/mode/overlay.js":5,"codemirror/mode/gfm/gfm.js":7,"codemirror/mode/markdown/markdown.js":8,"codemirror/mode/xml/xml.js":10,"marked":11,"spell-checker":1}]},{},[14])(14)
 });

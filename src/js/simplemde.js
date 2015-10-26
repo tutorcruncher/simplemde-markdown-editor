@@ -8,6 +8,7 @@ require("codemirror/mode/markdown/markdown.js");
 require("codemirror/addon/mode/overlay.js");
 require("codemirror/mode/gfm/gfm.js");
 require("codemirror/mode/xml/xml.js");
+require("./codemirror/mustache_vars");
 require("spell-checker");
 var marked = require("marked");
 
@@ -912,12 +913,13 @@ SimpleMDE.prototype.render = function(el) {
 	if(options.spellChecker !== false) {
 		mode = "spell-checker";
 		backdrop = options.parsingConfig;
-		backdrop.name = "gfm";
+		backdrop.name = "mustache_vars";
 		backdrop.gitHubSpice = false;
 	} else {
 		mode = options.parsingConfig;
-		mode.name = "gfm";
+		mode.name = "mustache_vars";
 		mode.gitHubSpice = false;
+		mode.context_variables = options.context_variables;
 	}
 
 	this.codemirror = CodeMirror.fromTextArea(el, {

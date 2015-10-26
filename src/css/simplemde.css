@@ -308,3 +308,12 @@
 .CodeMirror .CodeMirror-code .cm-strikethrough {
 	text-decoration: line-through;
 }
+
+.CodeMirror .CodeMirror-code .cm-mustache {
+  color: #5757a1;
+}
+
+.CodeMirror .CodeMirror-code .cm-mustache-error {
+  color: orange;
+  background-color: #444;
+}
