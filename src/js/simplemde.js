@@ -740,7 +740,7 @@ var toolbarBuiltInButtons = {
 	},
 	"guide": {
 		name: "guide",
-		action: "http://nextstepwebs.github.io/simplemde-markdown-editor/markdown-guide",
+		action: "http://help.tutorcruncher.com",
 		className: "fa fa-question-circle",
 		title: "Markdown Guide"
 	}

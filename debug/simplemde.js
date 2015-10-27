@@ -1,7 +1,7 @@
 (function(f){if(typeof exports==="object"&&typeof module!=="undefined"){module.exports=f()}else if(typeof define==="function"&&define.amd){define([],f)}else{var g;if(typeof window!=="undefined"){g=window}else if(typeof global!=="undefined"){g=global}else if(typeof self!=="undefined"){g=self}else{g=this}g.SimpleMDE = f()}})(function(){var define,module,exports;return (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 (function (global){
 
-; Typo = global.Typo = require("/home/samuel/code/simplemde-markdown-editor/node_modules/codemirror-spell-checker/src/js/typo.js");
+; Typo = global.Typo = require("/home/tom/simplemde-markdown-editor/node_modules/codemirror-spell-checker/src/js/typo.js");
 CodeMirror = global.CodeMirror = require("codemirror");
 ; var __browserify_shim_require__=require;(function browserifyShim(module, define, require) {
 // Initialize data globally to reduce memory consumption
@@ -99,7 +99,7 @@ if(!String.prototype.includes) {
 }).call(global, module, undefined, undefined);
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"/home/samuel/code/simplemde-markdown-editor/node_modules/codemirror-spell-checker/src/js/typo.js":2,"codemirror":6}],2:[function(require,module,exports){
+},{"/home/tom/simplemde-markdown-editor/node_modules/codemirror-spell-checker/src/js/typo.js":2,"codemirror":6}],2:[function(require,module,exports){
 (function (global){
 ; var __browserify_shim_require__=require;(function browserifyShim(module, exports, require, define, browserify_shim__define__module__export__) {
 'use strict';
@@ -4837,7 +4837,7 @@ CodeMirror.overlayMode = function(base, overlay, combine) {
 
   // Determines whether an event happened in the gutter, and fires the
   // handlers for the corresponding event.
-  function gutterEvent(cm, e, type, prevent, signalfn) {
+  function gutterEvent(cm, e, type, prevent) {
     try { var mX = e.clientX, mY = e.clientY; }
     catch(e) { return false; }
     if (mX >= Math.floor(cm.display.gutters.getBoundingClientRect().right)) return false;
@@ -4854,14 +4854,14 @@ CodeMirror.overlayMode = function(base, overlay, combine) {
       if (g && g.getBoundingClientRect().right >= mX) {
         var line = lineAtHeight(cm.doc, mY);
         var gutter = cm.options.gutters[i];
-        signalfn(cm, type, cm, line, gutter, e);
+        signal(cm, type, cm, line, gutter, e);
         return e_defaultPrevented(e);
       }
     }
   }
 
   function clickInGutter(cm, e) {
-    return gutterEvent(cm, e, "gutterClick", true, signalLater);
+    return gutterEvent(cm, e, "gutterClick", true);
   }
 
   // Kludge to work around strange IE behavior where it'll sometimes
@@ -5300,7 +5300,7 @@ CodeMirror.overlayMode = function(base, overlay, combine) {
 
   function contextMenuInGutter(cm, e) {
     if (!hasHandler(cm, "gutterContextMenu")) return false;
-    return gutterEvent(cm, e, "gutterContextMenu", false, signal);
+    return gutterEvent(cm, e, "gutterContextMenu", false);
   }
 
   // UPDATING
@@ -13544,7 +13544,7 @@ var toolbarBuiltInButtons = {
 	},
 	"guide": {
 		name: "guide",
-		action: "http://nextstepwebs.github.io/simplemde-markdown-editor/markdown-guide",
+		action: "http://help.tutorcruncher.com",
 		className: "fa fa-question-circle",
 		title: "Markdown Guide"
 	}
