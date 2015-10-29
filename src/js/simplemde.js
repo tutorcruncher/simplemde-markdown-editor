@@ -740,7 +740,7 @@ var toolbarBuiltInButtons = {
 	},
 	"guide": {
 		name: "guide",
-		action: "http://help.tutorcruncher.com",
+		action: "http://help.tutorcruncher.com/markdown/",
 		className: "fa fa-question-circle",
 		title: "Markdown Guide"
 	}
